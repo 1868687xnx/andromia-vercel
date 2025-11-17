@@ -18,6 +18,7 @@ class ExplorationRepository {
     }
 
     const exploration = await Exploration.create(body);
+    exploration.populate('ally');
     //exploration.allyHref = ally.href;
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
@@ -27,6 +28,7 @@ class ExplorationRepository {
   }
 
   transform(exploration) {
+    delete exploration.Ally
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
