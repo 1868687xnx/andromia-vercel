@@ -18,7 +18,7 @@ class ExplorationRepository {
     }
 
     const exploration = await Exploration.create(body);
-    exploration.populate('ally');
+    await exploration.populate('ally');
     //exploration.allyHref = ally.href;
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
