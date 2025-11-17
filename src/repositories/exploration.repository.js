@@ -28,7 +28,7 @@ class ExplorationRepository {
   }
 
   transform(exploration) {
-    delete exploration.Ally
+    delete exploration.ally
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
