@@ -1,52 +1,24 @@
-import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import cors from 'cors';
+import express from 'express';
+import jobs from './core/jobs.js';
+import database from './core/database.js';
+import errors from './middlewares/errors.js';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const app = express();
 
-const app = express()
+database();
 
-// Home route - HTML
-app.get('/', (req, res) => {
-  res.type('html').send(`
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8"/>
-        <title>Express on Vercel</title>
-        <link rel="stylesheet" href="/style.css" />
-      </head>
-      <body>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/api-data">API Data</a>
-          <a href="/healthz">Health</a>
-        </nav>
-        <h1>Welcome to Express on Vercel 🚀</h1>
-        <p>This is a minimal example without a database or forms.</p>
-        <img src="/logo.png" alt="Logo" width="120" />
-      </body>
-    </html>
-  `)
-})
+app.use(cors());
+app.use(express.json());
 
-app.get('/about', function (req, res) {
-  res.sendFile(path.join(__dirname, '..', 'components', 'about.htm'))
-})
+app.get('/status', (req, res) => { res.status(200).end(); });
+app.head('/status', (req, res) => { res.status(200).end(); });
 
-// Example API endpoint - JSON
-app.get('/api-data', (req, res) => {
-  res.json({
-    message: 'Here is some sample API data',
-    items: ['apple', 'banana', 'cherry'],
-  })
-})
+app.use('/explorers', (await import('./routes/explorateurs.routes.js')).default);
+app.use('/sessions', (await import('./routes/sessions.routes.js')).default);
+app.use('/explorer', (await import('./routes/explorations.routes.js')).default);
+app.use('/allies', (await import('./routes/allies.routes.js')).default);
+app.use('/explorations', (await import('./routes/explorations.routes.js')).default);
+app.use(errors);
 
-// Health check
-app.get('/healthz', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
-})
-
-export default app
+export default app;
