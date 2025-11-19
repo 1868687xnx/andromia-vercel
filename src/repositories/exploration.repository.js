@@ -12,6 +12,7 @@ class ExplorationRepository {
     body.explorateur = explorateur_id;
     console.log("BODY EXPLORATION REPO :", body);
 
+    
     const ally = await this.createAlly(body.ally, explorateur_id);
     if (ally) {
       body.ally = ally._id;
