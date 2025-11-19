@@ -35,9 +35,6 @@ class ExplorationRepository {
   transform(exploration) {
     console.log("trying to transform exploration")
     console.log(exploration)
-    if (exploration.ally && exploration.ally.uuid) {
-      exploration.ally = exploration.ally.uuid;
-    }
     delete exploration.ally._id
     console.log(exploration.ally);
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
