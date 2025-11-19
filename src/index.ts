@@ -17,7 +17,6 @@ app.head('/status', (req, res) => { res.status(200).end(); });
 app.use('/explorers', (await import('./routes/explorateurs.routes.js')).default);
 app.use('/sessions', (await import('./routes/sessions.routes.js')).default);
 app.use('/explorer', (await import('./routes/explorations.routes.js')).default);
-app.use('/allies', (await import('./routes/allies.routes.js')).default);
 app.use('/explorations', (await import('./routes/explorations.routes.js')).default);
 app.use(errors);
 
