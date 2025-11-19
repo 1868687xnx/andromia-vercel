@@ -23,11 +23,14 @@ class ExplorationRepository {
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
+    console.log(exploration)
     await exploration.populate('ally');
     exploration.toObject({ getters: false, virtuals: true });
     this.transform(exploration);
     return exploration;
   }
+
+   
 
   transform(exploration) {
     console.log("trying to transform exploration")
@@ -35,6 +38,7 @@ class ExplorationRepository {
     if (exploration.ally && exploration.ally.uuid) {
       exploration.ally = exploration.ally.uuid;
     }
+    console.log(exploration.ally);
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
