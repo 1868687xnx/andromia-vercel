@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post('/', explorateurValidators.postValidator(), validator, post);
 router.get('/:uuid', guardAuthorizationJWT, retrieveOne);
+router.get('/:uuid/vault', guardAuthorizationJWT, retrieveVault);
 
 async function post(req, res, next) {
     try {
@@ -31,6 +32,22 @@ async function retrieveOne(req, res, next) {
             account = account.toObject({ getters: false, virtuals: false });
             account = explorateurRepository.transform(account);
             res.status(200).json(account);
+        }
+    } catch (err) {
+        return next(err);
+    }
+}
+
+// Route pour retrieve le vault d'un explorateur
+async function retrieveVault(req, res, next) {
+    try {
+        let account = await explorateurRepository.retrieveByUUID(req.params.uuid);
+        if (!account) {
+            return next(HttpErrors.NotFound());
+        } else {
+            // on retourne le vault de l'explorateur
+            const vault = account.inventory.vault;
+            res.status(200).json(vault);
         }
     } catch (err) {
         return next(err);
