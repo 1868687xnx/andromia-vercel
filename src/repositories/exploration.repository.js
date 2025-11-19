@@ -23,6 +23,7 @@ class ExplorationRepository {
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
+    delete exploration.ally
     await exploration.populate('ally');
     this.transform(exploration);
     return exploration;
