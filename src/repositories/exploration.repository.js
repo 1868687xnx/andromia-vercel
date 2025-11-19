@@ -24,7 +24,7 @@ class ExplorationRepository {
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
     console.log(exploration)
-    await exploration.populate('ally');
+    await exploration.populate('ally', 'uuid');
     exploration.toObject({ getters: false, virtuals: true });
     this.transform(exploration);
     return exploration;
