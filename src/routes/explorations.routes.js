@@ -20,13 +20,13 @@ async function addExploration(req, res, next) {
     if (!explorateur) {
       return next(HttpErrors.NotFound());
     } else {
-      const newExploration = await axios.get(EXPLORATION_URL + req.params.key);
+      let newExploration = await axios.get(EXPLORATION_URL + req.params.key);
 
-      await explorationRepository.addForOneUser(
+      newExploration = await explorationRepository.addForOneUser(
         newExploration.data,
         explorateur._id
       );
-      res.status(200).json(newExploration.data);
+      res.status(200).json(newExploration);
       if (req.query._body === "false") {
         return res.status(204).end();
       }

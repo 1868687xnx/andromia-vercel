@@ -18,23 +18,25 @@ class ExplorationRepository {
       body.ally = ally._id;
     }
 
-    const exploration = await Exploration.create(body);
+    let exploration = await Exploration.create(body);
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
     await exploration.populate('ally', 'uuid');
+    exploration = exploration.toObject({ getters: false, virtuals: true });
+    exploration = this.transform(exploration);
     console.log(exploration);
-    exploration.toObject({ getters: false, virtuals: true });
-    this.transform(exploration);
     return exploration;
   }
 
    
 
   transform(exploration) {
-    console.log("trying to transform exploration");
-    console.log(exploration);
     console.log(exploration.ally);
+    if(!exploration.ally)
+      return;
+    delete exploration.ally._id;
+    delete exploration.ally.id;
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
