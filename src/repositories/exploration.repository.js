@@ -22,13 +22,15 @@ class ExplorationRepository {
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
-    this.transform(exploration);
     await exploration.populate('ally');
+    this.transform(exploration);
     return exploration;
   }
 
   transform(exploration) {
-    delete exploration.ally
+    if (exploration.ally && exploration.ally.uuid) {
+      exploration.ally = exploration.ally.uuid;
+    }
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
