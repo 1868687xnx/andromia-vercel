@@ -29,6 +29,8 @@ class ExplorationRepository {
   }
 
   transform(exploration) {
+    console.log("trying to transform exploration")
+    console.log(exploration)
     if (exploration.ally && exploration.ally.uuid) {
       exploration.ally = exploration.ally.uuid;
     }
