@@ -24,7 +24,7 @@ class ExplorationRepository {
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
     await exploration.populate('ally');
-    exploration.toObject({ getters: false, virtuals: false });
+    exploration.toObject({ getters: false, virtuals: true });
     this.transform(exploration);
     return exploration;
   }
