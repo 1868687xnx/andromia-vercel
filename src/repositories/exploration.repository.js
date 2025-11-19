@@ -18,12 +18,12 @@ class ExplorationRepository {
     }
 
     const exploration = await Exploration.create(body);
-    await exploration.populate('ally');
     //exploration.allyHref = ally.href;
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
     this.transform(exploration);
+    await exploration.populate('ally');
     return exploration;
   }
 
