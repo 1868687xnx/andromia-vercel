@@ -38,6 +38,7 @@ class ExplorationRepository {
     if (exploration.ally && exploration.ally.uuid) {
       exploration.ally = exploration.ally.uuid;
     }
+    delete exploration.ally._id
     console.log(exploration.ally);
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
