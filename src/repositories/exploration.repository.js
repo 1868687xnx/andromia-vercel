@@ -12,6 +12,7 @@ class ExplorationRepository {
     body.explorateur = explorateur_id;
     console.log("BODY EXPLORATION REPO :", body);
 
+    
     const ally = await this.createAlly(body.ally, explorateur_id);
     if (ally) {
       body.ally = ally._id;
@@ -23,11 +24,14 @@ class ExplorationRepository {
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
     await exploration.populate('ally');
+    exploration.toObject({ getters: false, virtuals: true });
     this.transform(exploration);
     return exploration;
   }
 
   transform(exploration) {
+    console.log("trying to transform exploration")
+    console.log(exploration)
     if (exploration.ally && exploration.ally.uuid) {
       exploration.ally = exploration.ally.uuid;
     }

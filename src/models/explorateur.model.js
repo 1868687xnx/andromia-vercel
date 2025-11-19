@@ -11,7 +11,7 @@ const explorateurSchema = mongoose.Schema(
         uuid: { type: String, required: true, unique: true, default: () => crypto.randomUUID() },
         passwordHash: { type: String, required: true, unique: true },
 
-        location: { type: String, default: '' },
+        location: { type: String, default: 'Lac de Meth' },
         nbLootboxes: { type: Number, default: 0 },
         // l'inventory contient les items ramassés par l'explorateur, soit des inox, soit des éléments divers
         inventory: {
