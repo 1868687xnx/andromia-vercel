@@ -17,26 +17,29 @@ class ExplorationRepository {
     if (ally) {
       body.ally = ally._id;
     }
-
     let exploration = await Exploration.create(body);
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
-    await exploration.populate('ally', 'uuid');
+    await exploration.populate('ally');
     exploration = exploration.toObject({ getters: false, virtuals: true });
     exploration = this.transform(exploration);
-    console.log(exploration);
     return exploration;
   }
 
    
 
   transform(exploration) {
-    console.log(exploration.ally);
     if(!exploration.ally)
-      return;
+      return exploration;
     delete exploration.ally._id;
+    delete exploration.explorateur;
+    delete exploration.ally.explorateur;
     delete exploration.ally.id;
+    delete exploration.id;
+    delete exploration._id;
+    delete exploration.updatedAt;
+    delete exploration.__y;
     exploration.href = `${process.env.BASE_URL}/explorations/${exploration.uuid}`;
     return exploration;
   }
@@ -67,9 +70,14 @@ class ExplorationRepository {
     }
   }
 
-  async retrieveByExplorateurUUID(explorateurUUId) {
+  async retrieveByExplorateurUUID(explorateurUUId, options) {
     const explorateur = await Explorateur.findOne({ uuid: explorateurUUId });
-    return Exploration.find({ explorateur: explorateur._id });
+    const retrieveQuery = Exploration.find(options.filter)
+      .limit(options.limit)
+      .skip(options.skip)
+      .sort({ explorationDate: 1 })
+
+      return Promise.all([retrieveQuery, Exploration.countDocuments(options.filter)]);
   }
 }
 
