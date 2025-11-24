@@ -5,6 +5,7 @@ import explorateurRepository from "../repositories/explorateur.repository.js"
 import allyRepository from '../repositories/ally.repository.js';
 import explorateurValidators from '../validators/explorateur.validator.js';
 import { guardAuthorizationJWT } from '../middlewares/authorization.jwt.js';
+import { TABLE_ELEMENT } from '../core/constants.js';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.get('/:uuid/vault', guardAuthorizationJWT, retrieveVault);
 router.get('/:uuid/allies', guardAuthorizationJWT, retrieveAlliesByUUID);
 router.get('/:uuid/allies/:uuidAlly', guardAuthorizationJWT, retrieveOneAlly);
 router.patch('/:uuid', guardAuthorizationJWT, addAlly);
+router.post('/:uuid/openlootbox', guardAuthorizationJWT, openLootbox);
 
 async function post(req, res, next) {
     try {
@@ -115,5 +117,37 @@ async function retrieveOneAlly(req, res, next) {
         return next(err);
     }
 }
+
+// Route pour ouvrir un lootbox d'un explorateur 
+async function openLootbox(req, res, next) {
+    try {
+        const explorateur = await explorateurRepository.retrieveByUUID(req.params.uuid);
+        if (!explorateur) {
+            return next(HttpErrors.NotFound("Aucun explorateur trouvé avec cet UUID"));
+        }
+
+        // Ouvrir la lootbox et récupérer les récompenses
+        const lootboxResult = await explorateurRepository.openLootbox(explorateur, TABLE_ELEMENT);
+
+        // On fait un randomize pour savoir si on ajoute un ally ou pas (50% de chance)
+        const addAllyChance = Math.random();
+        let allyAdded = false;
+        if (addAllyChance > 0.5) {
+            // on ajoute un ally via le repository
+            allyAdded = await allyRepository.generateRandomAlly(explorateur._id);
+        }
+
+        // Retourner le résultat
+        res.status(200).json({
+            ...lootboxResult,
+            allyAdded: allyAdded
+        });
+    } catch (err) {
+        return next(err);
+    }
+}
+
+
+
 
 export default router;

@@ -101,6 +101,41 @@ class ExplorateurRepository {
 
         return explorateur;
     }
+
+    // Méthode pour ouvrir une lootbox
+    async openLootbox(explorateur, TABLE_ELEMENT) {
+        // Vérifier que l'explorateur a des lootboxes
+        if (explorateur.nbLootboxes <= 0) {
+            throw HttpErrors.BadRequest("L'explorateur n'a pas de lootbox à ouvrir");
+        }
+
+        // Décrémenter le nombre de lootbox
+        explorateur.nbLootboxes -= 1;
+
+        // Ajouter un nombre d'inox aléatoire entre 10 et 30
+        const inoxToAdd = Math.floor(Math.random() * 21) + 10;
+        explorateur.inventory.vault.inox += inoxToAdd;
+
+        // Ajouter entre 1 et 5 pour chaque élément
+        const elementsAdded = [];
+        TABLE_ELEMENT.forEach((element, index) => {
+            const quantityToAdd = Math.floor(Math.random() * 5) + 1;
+            explorateur.inventory.vault.elements[index].quantity += quantityToAdd;
+            elementsAdded.push({
+                element: element,
+                quantity: quantityToAdd
+            });
+        });
+
+        // Sauvegarder les modifications
+        await explorateur.save();
+
+        return {
+            inoxAdded: inoxToAdd,
+            elementsAdded: elementsAdded,
+            lootboxesRemaining: explorateur.nbLootboxes
+        };
+    }
 }
 
 export default new ExplorateurRepository();

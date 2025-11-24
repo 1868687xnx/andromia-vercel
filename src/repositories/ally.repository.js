@@ -38,6 +38,29 @@ class AllyRepository {
         const updatedAlly = await Ally.findOne({uuid: allyUUID});
         return updatedAlly;
     }
+
+    // Méthode pour générer un ally aléatoire via l'API externe
+    async generateRandomAlly(explorateur_id) {
+        try {
+            const response = await fetch('https://api.andromia.science/allies/actions?type=generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                const allyData = await response.json();
+                // Créer l'ally pour cet utilisateur
+                await this.createForOneUser(allyData.uuid, explorateur_id);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error("Erreur lors de la génération de l'ally:", err);
+            return false;
+        }
+    }
 }
 
 export default new AllyRepository();
