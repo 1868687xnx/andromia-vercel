@@ -6,7 +6,7 @@ import explorateurRepository from "../repositories/explorateur.repository.js"
 
 const router = express.Router();
 
-router.get('/', login);
+router.post('/', login);
 
 async function login(req, res, next) {
     try {
