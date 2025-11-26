@@ -10,13 +10,13 @@ import paginateMiddleware from "../middlewares/paginate.js";
 
 const router = express.Router();
 
-router.post("/", explorateurValidators.postValidator(), validator, post);
-router.get("/:uuid", guardAuthorizationJWT, retrieveOne);
-router.get("/:uuid/vault", guardAuthorizationJWT, retrieveVault);
-router.get("/:uuid/allies/", paginateMiddleware({ defaultLimit: 25, defaultMaxLimit: 50 }), guardAuthorizationJWT, retrieveAlliesByUUID);
-router.get("/:uuid/allies/:uuidAlly", guardAuthorizationJWT, retrieveOneAlly);
-router.patch("/allies/:uuid", guardAuthorizationJWT, addAlly);
-router.post("/:uuid/openlootbox", guardAuthorizationJWT, openLootbox);
+router.post('/', explorateurValidators.postValidator(), validator, post);
+router.get('/:uuid', guardAuthorizationJWT, retrieveOne);
+router.get('/:uuid/vault', guardAuthorizationJWT, retrieveVault);
+router.get('/:uuid/allies/', guardAuthorizationJWT, retrieveAlliesByUUID);
+router.get('/:uuid/allies/:uuidAlly', guardAuthorizationJWT, retrieveOneAlly);
+router.patch('/allies/:uuid', guardAuthorizationJWT, addAlly);
+router.post('/:uuid/lootboxes', guardAuthorizationJWT, openLootbox);
 
 async function post(req, res, next) {
   try {
