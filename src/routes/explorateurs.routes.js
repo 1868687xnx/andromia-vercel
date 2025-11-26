@@ -15,7 +15,7 @@ router.get('/:uuid/vault', guardAuthorizationJWT, retrieveVault);
 router.get('/:uuid/allies/', guardAuthorizationJWT, retrieveAlliesByUUID);
 router.get('/:uuid/allies/:uuidAlly', guardAuthorizationJWT, retrieveOneAlly);
 router.patch('/allies/:uuid', guardAuthorizationJWT, addAlly);
-router.post('/:uuid/openlootbox', guardAuthorizationJWT, openLootbox);
+router.post('/:uuid/lootboxes', guardAuthorizationJWT, openLootbox);
 
 async function post(req, res, next) {
     try {
