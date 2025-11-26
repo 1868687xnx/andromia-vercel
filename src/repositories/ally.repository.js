@@ -13,8 +13,7 @@ class AllyRepository {
         return allies;
     }
 
-    transform(ally, explorateur_id = null) {
-        ally.explorateur = explorateur_id;
+    transform(ally) {
         delete ally.books;
         delete ally.expireAt;
         delete ally.crypto;
