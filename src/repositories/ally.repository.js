@@ -5,14 +5,14 @@ class AllyRepository {
     return Ally.find({ uuid: uuid });
   }
 
-  retrieveForOneUser(idExplorateur) {
+  retrieveForOneUser(idExplorateur, options) {
     const retrieveQuery = Ally.find(options.filter)
       .limit(options.limit)
       .skip(options.skip)
       .sort({ explorationDate: 1 });
     return Promise.all([
       retrieveQuery,
-      Exploration.countDocuments(options.filter),
+      Ally.countDocuments(options.filter),
     ]);
   }
 

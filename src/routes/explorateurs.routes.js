@@ -7,16 +7,26 @@ import explorateurValidators from "../validators/explorateur.validator.js";
 import { guardAuthorizationJWT } from "../middlewares/authorization.jwt.js";
 import { TABLE_ELEMENT } from "../core/constants.js";
 import paginateMiddleware from "../middlewares/paginate.js";
+import explorationRepository from "../repositories/exploration.repository.js";
 
 const router = express.Router();
 
-router.post('/', explorateurValidators.postValidator(), validator, post);
-router.get('/:uuid', guardAuthorizationJWT, retrieveOne);
-router.get('/:uuid/vault', guardAuthorizationJWT, retrieveVault);
-router.get('/:uuid/allies/', guardAuthorizationJWT, retrieveAlliesByUUID);
-router.get('/:uuid/allies/:uuidAlly', guardAuthorizationJWT, retrieveOneAlly);
-router.patch('/allies/:uuid', guardAuthorizationJWT, addAlly);
-router.post('/:uuid/lootboxes', guardAuthorizationJWT, openLootbox);
+router.post("/", explorateurValidators.postValidator(), validator, post);
+router.get("/:uuid", guardAuthorizationJWT, retrieveOne);
+router.get("/:uuid/vault", guardAuthorizationJWT, retrieveVault);
+router.get(
+  "/:uuid/allies/",
+  guardAuthorizationJWT,
+  retrieveAlliesByUUID
+);
+router.get(
+  "/:uuid/explorations",
+  guardAuthorizationJWT,
+  retrieveAllForUser
+);
+router.get("/:uuid/allies/:uuidAlly", guardAuthorizationJWT, retrieveOneAlly);
+router.patch("/allies/:uuid", guardAuthorizationJWT, addAlly);
+router.post("/:uuid/lootboxes", guardAuthorizationJWT, openLootbox);
 
 async function post(req, res, next) {
   try {
@@ -92,11 +102,9 @@ async function retrieveAlliesByUUID(req, res, next) {
       );
     } else {
       const options = {
-        skip: req.pagination.skip,
-        limit: req.pagination.limit,
         filter: { explorateur },
       };
-      let [allies, totalDocuments] = await allyRepository.retrieveForOneUser(
+      let [allies] = await allyRepository.retrieveForOneUser(
         explorateur._id,
         options
       );
@@ -105,28 +113,12 @@ async function retrieveAlliesByUUID(req, res, next) {
         a = allyRepository.transform(a, req.options);
         return a;
       });
-      const totalPages = Math.ceil(totalDocuments / req.pagination.limit);
-
-      if (req.pagination.page > totalPages) {
-        throw HttpErrors.BadRequest(
-          `La page demandée doit être inférieure à ${totalPages}`
-        );
-      }
 
       const responseBody = {
-        _metadata: {
-          page: req.pagination.page,
-          limit: req.pagination.limit,
-          skip: req.pagination.skip,
-          hasNextPage: req.pagination.page < totalPages,
-          totalPages: totalPages,
-          totalDocuments: totalDocuments,
-        },
-        _links: req.pagination.links(totalPages),
-        data: explorations,
+        data: allies,
       };
+      res.status(200).json(responseBody);
     }
-    res.status(200).json(allies);
   } catch (err) {
     return next(err);
   }
@@ -186,6 +178,39 @@ async function openLootbox(req, res, next) {
       ...lootboxResult,
       allyAdded: allyAdded,
     });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+async function retrieveAllForUser(req, res, next) {
+  try {
+    const explorateur = await explorateurRepository.retrieveByUUID(
+      req.params.uuid
+    );
+    if (!explorateur) {
+      return next(HttpErrors.NotFound());
+    } else {
+      const options = {
+        filter: { explorateur },
+      };
+      let [explorations] =
+        await explorationRepository.retrieveByExplorateurUUID(
+          req.params.uuid,
+          options
+        );
+      explorations = explorations.map((e) => {
+        e = e.toObject({ getters: false, virtuals: false });
+        e = explorationRepository.transform(e);
+        return e;
+      });
+
+      const responseBody = {
+        data: explorations,
+      };
+
+      res.status(200).json(responseBody);
+    }
   } catch (err) {
     return next(err);
   }
