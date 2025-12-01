@@ -122,7 +122,7 @@ class ExplorateurRepository {
             const quantityToAdd = Math.floor(Math.random() * 5) + 1;
             explorateur.inventory.vault.elements[index].quantity += quantityToAdd;
             elements.push({
-                element: element,
+                elements: element,
                 quantity: quantityToAdd
             });
         });
@@ -132,7 +132,7 @@ class ExplorateurRepository {
 
         return {
             inox: inoxToAdd,
-            elements: elementsAdded
+            elements: elements
         };
     }
 }
