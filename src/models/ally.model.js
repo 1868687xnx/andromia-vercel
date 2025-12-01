@@ -46,7 +46,7 @@ const allySchema = mongoose.Schema(
       required: true,
     },
     affinity: {
-      type: mongoose.Schema.Types.Array,
+      type: mongoose.Schema.Types.String,
       required: true,
     },
     essence: {
