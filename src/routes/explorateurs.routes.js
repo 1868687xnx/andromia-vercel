@@ -8,6 +8,7 @@ import { guardAuthorizationJWT } from "../middlewares/authorization.jwt.js";
 import { TABLE_ELEMENT } from "../core/constants.js";
 import explorationRepository from "../repositories/exploration.repository.js";
 import axios from "axios";
+import { EXPLORATION_URL } from "../core/constants.js";
 
 const router = express.Router();
 
