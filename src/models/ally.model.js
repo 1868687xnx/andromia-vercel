@@ -19,8 +19,19 @@ const allySchema = mongoose.Schema(
       default: crypto.randomBytes(16).toString("base64url"),
     },
     stats: {
-      type: mongoose.Schema.Types.Array,
-      required: true,
+      life: { type: Number, default: 0 },
+      speed: {
+        low: { type: Number, default: 0 },
+        high: { type: Number, default: 0 },
+      },
+      power: {
+        low: { type: Number, default: 0 },
+        high: { type: Number, default: 0 },
+      },
+      shield: {
+        low: { type: Number, default: 0 },
+        high: { type: Number, default: 0 },
+      },
     },
     kernel: {
       type: mongoose.Schema.Types.Array,
@@ -46,9 +57,8 @@ const allySchema = mongoose.Schema(
       type: mongoose.Schema.Types.String,
       required: true,
     },
-    href: { type: mongoose.Schema.Types.String, 
-        required: true },
-    },
+    href: { type: mongoose.Schema.Types.String, required: true },
+  },
   {
     collection: "allies",
     strict: "throw",
