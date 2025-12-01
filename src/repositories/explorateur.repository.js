@@ -117,11 +117,11 @@ class ExplorateurRepository {
         explorateur.inventory.vault.inox += inoxToAdd;
 
         // Ajouter entre 1 et 5 pour chaque élément
-        const elementsAdded = [];
+        const elements = [];
         TABLE_ELEMENT.forEach((element, index) => {
             const quantityToAdd = Math.floor(Math.random() * 5) + 1;
             explorateur.inventory.vault.elements[index].quantity += quantityToAdd;
-            elementsAdded.push({
+            elements.push({
                 element: element,
                 quantity: quantityToAdd
             });
@@ -131,9 +131,8 @@ class ExplorateurRepository {
         await explorateur.save();
 
         return {
-            inoxAdded: inoxToAdd,
-            elementsAdded: elementsAdded,
-            lootboxesRemaining: explorateur.nbLootboxes
+            inox: inoxToAdd,
+            elements: elementsAdded
         };
     }
 }

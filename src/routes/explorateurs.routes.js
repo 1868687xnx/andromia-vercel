@@ -8,6 +8,7 @@ import { guardAuthorizationJWT } from "../middlewares/authorization.jwt.js";
 import { TABLE_ELEMENT } from "../core/constants.js";
 import paginateMiddleware from "../middlewares/paginate.js";
 import explorationRepository from "../repositories/exploration.repository.js";
+import { Axios } from "axios";
 
 const router = express.Router();
 
@@ -27,6 +28,7 @@ router.get(
 router.get("/:uuid/allies/:uuidAlly", guardAuthorizationJWT, retrieveOneAlly);
 router.patch("/allies/:uuid", guardAuthorizationJWT, addAlly);
 router.post("/:uuid/lootboxes", guardAuthorizationJWT, openLootbox);
+router.post("/:uuid/explorations/:key", guardAuthorizationJWT, addExploration);
 
 async function post(req, res, next) {
   try {
@@ -65,6 +67,32 @@ async function retrieveVault(req, res, next) {
       // on retourne le vault de l'explorateur
       const vault = account.inventory.vault;
       res.status(200).json(vault);
+    }
+  } catch (err) {
+    return next(err);
+  }
+}
+
+
+
+async function addExploration(req, res, next) {
+  try {
+    const explorateur = await explorateurRepository.retrieveByUUID(
+      req.params.uuid
+    );
+    if (!explorateur) {
+      return next(HttpErrors.NotFound());
+    } else {
+      let newExploration = await axios.get(EXPLORATION_URL + req.params.key);
+
+      newExploration = await explorationRepository.addForOneUser(
+        newExploration.data,
+        explorateur._id
+      );
+      res.status(200).json(newExploration);
+      if (req.query._body === "false") {
+        return res.status(204).end();
+      }
     }
   } catch (err) {
     return next(err);
