@@ -28,7 +28,7 @@ router.get(
 router.get("/:uuid/allies/:uuidAlly", guardAuthorizationJWT, retrieveOneAlly);
 router.patch("/allies/:uuid", guardAuthorizationJWT, addAlly);
 router.post("/:uuid/lootboxes", guardAuthorizationJWT, openLootbox);
-router.post("/:uuid/explorations/:key", guardAuthorizationJWT, addExploration);
+router.post("/:uuid/explorations", guardAuthorizationJWT, addExploration);
 
 async function post(req, res, next) {
   try {
@@ -83,7 +83,7 @@ async function addExploration(req, res, next) {
     if (!explorateur) {
       return next(HttpErrors.NotFound());
     } else {
-      let newExploration = await axios.get(EXPLORATION_URL + req.params.key);
+      let newExploration = await axios.get(EXPLORATION_URL + req.query.key);
 
       newExploration = await explorationRepository.addForOneUser(
         newExploration.data,
