@@ -6,9 +6,8 @@ import allyRepository from "../repositories/ally.repository.js";
 import explorateurValidators from "../validators/explorateur.validator.js";
 import { guardAuthorizationJWT } from "../middlewares/authorization.jwt.js";
 import { TABLE_ELEMENT } from "../core/constants.js";
-import paginateMiddleware from "../middlewares/paginate.js";
 import explorationRepository from "../repositories/exploration.repository.js";
-import { Axios } from "axios";
+import axios from "axios";
 
 const router = express.Router();
 
