@@ -17,6 +17,7 @@ class AllyRepository {
   }
 
   transform(ally) {
+    delete ally.explorateur;
     delete ally.books;
     delete ally.expireAt;
     delete ally.crypto;
