@@ -68,17 +68,16 @@ class ExplorationRepository {
 
   async retrieveByExplorateurUUID(explorateurUUId, options) {
     const explorateur = await Explorateur.findOne({ uuid: explorateurUUId });
-    const retrieveQuery = Exploration.find(options.filter)
+    const explorations = await Exploration.find(options.filter)
       .limit(options.limit)
       .skip(options.skip)
-      .sort({ explorationDate: 1 });
-    for(let explo in retrieveQuery){
-      delete explo.ally;
-    }
-    return Promise.all([
-      retrieveQuery,
-      Exploration.countDocuments(options.filter),
-    ]);
+      .sort({ explorationDate: 1 })
+      .select('-ally')
+      .lean();
+    
+    const count = await Exploration.countDocuments(options.filter);
+    
+    return [explorations, count];
   }
 }
 
