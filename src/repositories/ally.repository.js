@@ -1,4 +1,5 @@
 import { Ally } from "../models/ally.model.js";
+import axios from "axios";
 
 class AllyRepository {
   retrieveByUUID(uuid) {
@@ -39,23 +40,20 @@ class AllyRepository {
   // Méthode pour générer un ally aléatoire via l'API externe
   async generateRandomAlly(explorateur_id) {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://api.andromia.science/allies/actions?type=generate",
+        {},
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      if (response.ok) {
-        const allyData = await response.json();
-        // Créer l'ally pour cet utilisateur
-        await this.createForOneUser(allyData.uuid, explorateur_id);
-        return true;
-      }
-      return false;
+      const allyData = response.data;
+      // Créer l'ally pour cet utilisateur
+      await this.createForOneUser(allyData.uuid, explorateur_id);
+      return true;
     } catch (err) {
       console.error("Erreur lors de la génération de l'ally:", err);
       return false;
