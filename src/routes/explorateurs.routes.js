@@ -117,6 +117,7 @@ async function addAlly(req, res, next) {
   } catch (err) {
     return next(err);
   }
+  
 }
 
 // Route pour récupérer les Allies d'un explorateur spécifique par son UUID
