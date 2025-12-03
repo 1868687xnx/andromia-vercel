@@ -2,6 +2,7 @@ import { Ally } from "../models/ally.model.js";
 
 class AllyRepository {
   retrieveByUUID(uuid) {
+    console.log(uuid);
     return Ally.findOne({ uuid: uuid });
   }
 
