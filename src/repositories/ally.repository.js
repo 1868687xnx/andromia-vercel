@@ -54,7 +54,7 @@ class AllyRepository {
       const allyData = response.data;
       
       // Filtrer les données pour ne garder que les champs du schéma
-      const { crypto, ...validAllyData } = allyData;
+      const { crypto, books, ...validAllyData } = allyData;
       
       // Créer l'ally dans la base de données
       let newAlly = new Ally({
