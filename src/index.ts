@@ -10,7 +10,7 @@ const app = express();
 database();
 
 app.use(cors());
-app.use(methodoverride());
+app.use(methodoverride('X-HTTP-Method-Override'))
 app.use(express.json());
 
 app.get('/status', (req, res) => { res.status(200).end(); });
