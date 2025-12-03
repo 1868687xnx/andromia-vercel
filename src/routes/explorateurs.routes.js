@@ -166,7 +166,9 @@ async function retrieveOneAlly(req, res, next) {
       );
     }
 
+
     let ally = await allyRepository.retrieveByUUID(req.params.allyUUID);
+    console.log("ALLY FOUND :", ally);
     if (!ally) {
       return next(HttpErrors.NotFound("Aucun ally trouvé avec cet UUID"));
     }
