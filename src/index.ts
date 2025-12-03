@@ -3,12 +3,14 @@ import express from 'express';
 import jobs from './core/jobs.js';
 import database from './core/database.js';
 import errors from './middlewares/errors.js';
+import methodoverride from 'method-override';
 
 const app = express();
 
 database();
 
 app.use(cors());
+app.use(methodoverride());
 app.use(express.json());
 
 app.get('/status', (req, res) => { res.status(200).end(); });
