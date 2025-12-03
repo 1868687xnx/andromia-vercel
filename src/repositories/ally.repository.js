@@ -3,6 +3,7 @@ import axios from "axios";
 
 class AllyRepository {
   retrieveByUUID(uuid) {
+    console.log(uuid);
     return Ally.findOne({ uuid: uuid });
   }
 

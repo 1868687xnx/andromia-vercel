@@ -117,7 +117,7 @@ async function addAlly(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  
+
 }
 
 // Route pour récupérer les Allies d'un explorateur spécifique par son UUID
@@ -166,8 +166,8 @@ async function retrieveOneAlly(req, res, next) {
       );
     }
 
-
-    let ally = await allyRepository.retrieveByUUID(req.params.allyUUID);
+    console.log(req.params.uuidAlly);
+    let ally = await allyRepository.retrieveByUUID(req.params.uuidAlly);
     console.log("ALLY FOUND :", ally);
     if (!ally) {
       return next(HttpErrors.NotFound("Aucun ally trouvé avec cet UUID"));
