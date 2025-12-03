@@ -72,8 +72,7 @@ class ExplorationRepository {
       .limit(options.limit)
       .skip(options.skip)
       .sort({ explorationDate: 1 })
-      .select('-ally')
-      .lean();
+      .select('-ally');
     
     const count = await Exploration.countDocuments(options.filter);
     
