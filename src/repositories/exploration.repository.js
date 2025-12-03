@@ -12,7 +12,6 @@ class ExplorationRepository {
     body.explorateur = explorateur_id;
     console.log("BODY EXPLORATION REPO :", body);
 
-    
     const ally = await this.createAlly(body.ally, explorateur_id);
     if (ally) {
       body.ally = ally._id;
@@ -21,17 +20,14 @@ class ExplorationRepository {
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
-    await exploration.populate('ally');
+    await exploration.populate("ally");
     exploration = exploration.toObject({ getters: false, virtuals: true });
     exploration = this.transform(exploration);
     return exploration;
   }
 
-   
-
   transform(exploration) {
-    if(!exploration.ally)
-      return exploration;
+    if (!exploration.ally) return exploration;
     delete exploration.ally._id;
     delete exploration.explorateur;
     delete exploration.ally.explorateur;
@@ -75,9 +71,14 @@ class ExplorationRepository {
     const retrieveQuery = Exploration.find(options.filter)
       .limit(options.limit)
       .skip(options.skip)
-      .sort({ explorationDate: 1 })
-
-      return Promise.all([retrieveQuery, Exploration.countDocuments(options.filter)]);
+      .sort({ explorationDate: 1 });
+    for(let explo in retrieveQuery){
+      delete explo.ally;
+    }
+    return Promise.all([
+      retrieveQuery,
+      Exploration.countDocuments(options.filter),
+    ]);
   }
 }
 
