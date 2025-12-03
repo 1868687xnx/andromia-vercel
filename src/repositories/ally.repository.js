@@ -54,13 +54,17 @@ class AllyRepository {
       const allyData = response.data;
       
       // Créer l'ally dans la base de données
-      const newAlly = new Ally({
+      let newAlly = new Ally({
         ...allyData,
         explorateur: explorateur_id,
       });
       await newAlly.save();
       
-      return true;
+      // Transformer l'ally
+      newAlly = newAlly.toObject({ getters: false, virtuals: false });
+      newAlly = this.transform(newAlly);
+      
+      return newAlly;
     } catch (err) {
       console.error("Erreur lors de la génération de l'ally:", err);
       return false;

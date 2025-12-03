@@ -199,7 +199,7 @@ async function openLootbox(req, res, next) {
 
     // On fait un randomize pour savoir si on ajoute un ally ou pas (50% de chance)
     const addAllyChance = Math.random();
-    let allyAdded = false;
+    let allyAdded = null;
     if (addAllyChance > 0.5) {
       // on ajoute un ally via le repository
       allyAdded = await allyRepository.generateRandomAlly(explorateur._id);
