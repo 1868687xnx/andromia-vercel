@@ -52,8 +52,14 @@ class AllyRepository {
       );
 
       const allyData = response.data;
-      // Créer l'ally pour cet utilisateur
-      await this.createForOneUser(allyData.uuid, explorateur_id);
+      
+      // Créer l'ally dans la base de données
+      const newAlly = new Ally({
+        ...allyData,
+        explorateur: explorateur_id,
+      });
+      await newAlly.save();
+      
       return true;
     } catch (err) {
       console.error("Erreur lors de la génération de l'ally:", err);
