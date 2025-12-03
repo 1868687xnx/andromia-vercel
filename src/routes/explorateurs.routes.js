@@ -208,7 +208,7 @@ async function openLootbox(req, res, next) {
     // Retourner le résultat
     res.status(200).json({
       ...lootboxResult,
-      allyAdded: allyAdded,
+      ally: allyAdded,
     });
   } catch (err) {
     return next(err);
