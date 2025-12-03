@@ -12,7 +12,7 @@ class ExplorationRepository {
     body.explorateur = explorateur_id;
     console.log("BODY EXPLORATION REPO :", body);
 
-    const ally = await this.createAlly(body.ally, explorateur_id);
+    const ally = await this.createAlly(body.ally);
     if (ally) {
       body.ally = ally._id;
     }
@@ -20,7 +20,7 @@ class ExplorationRepository {
     explorateur.location = exploration.destination;
     this.addToExplorateurInventory(explorateur, exploration.vault);
     await explorateur.save();
-    await exploration.populate("ally");
+    exploration = await exploration.populate("ally");
     exploration = exploration.toObject({ getters: false, virtuals: true });
     exploration = this.transform(exploration);
     return exploration;

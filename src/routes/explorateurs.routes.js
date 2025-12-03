@@ -112,6 +112,7 @@ async function addAlly(req, res, next) {
       return res.status(204).end();
     }
     newAlly = newAlly.toObject({ getters: false, virtuals: false });
+    newAlly = allyRepository.transform(newAlly);
     res.status(201).json(newAlly);
   } catch (err) {
     return next(err);

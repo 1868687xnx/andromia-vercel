@@ -10,10 +10,7 @@ class AllyRepository {
       .limit(options.limit)
       .skip(options.skip)
       .sort({ explorationDate: 1 });
-    return Promise.all([
-      retrieveQuery,
-      Ally.countDocuments(options.filter),
-    ]);
+    return Promise.all([retrieveQuery, Ally.countDocuments(options.filter)]);
   }
 
   transform(ally) {
@@ -31,12 +28,11 @@ class AllyRepository {
     if (!newally) {
       throw new Error("Ally not found");
     }
-    const updatedAllyData = this.transform(newally.toObject(), explorateur_id);
-    await Ally.findOneAndUpdate({ uuid: allyUUID }, updatedAllyData, {
+    newally.explorateur = explorateur_id;
+    const updatedAlly = await Ally.findOneAndUpdate({ uuid: allyUUID }, newally, {
       new: true,
     });
     // Fetch the updated Ally
-    const updatedAlly = await Ally.findOne({ uuid: allyUUID });
     return updatedAlly;
   }
 

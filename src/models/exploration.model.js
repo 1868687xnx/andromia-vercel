@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { type } from 'os';
 
 const explorationSchema = mongoose.Schema(
     {
@@ -15,7 +16,7 @@ const explorationSchema = mongoose.Schema(
         affinity: { type: String, required: true },
         vault: {
             inox: { type: Number, default: 0 },
-            element: { type: []}
+            elements: { type: [{element: String, quantity: Number}]}
         },
         ally: { 
             type: mongoose.Schema.Types.ObjectId,
