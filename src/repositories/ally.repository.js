@@ -2,7 +2,7 @@ import { Ally } from "../models/ally.model.js";
 
 class AllyRepository {
   retrieveByUUID(uuid) {
-    return Ally.find({ uuid: uuid });
+    return Ally.findOne({ uuid: uuid });
   }
 
   retrieveForOneUser(idExplorateur, options) {
