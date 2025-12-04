@@ -10,6 +10,15 @@ class ExplorationRepository {
       throw new Error("Explorateur not found");
     }
     body.explorateur = explorateur_id;
+    
+    // Transform vault.elements from { element, quantity } to { symbol, quantity }
+    if (body.vault && body.vault.elements) {
+      body.vault.elements = body.vault.elements.map(el => ({
+        symbol: el.element || el.symbol,
+        quantity: el.quantity
+      }));
+    }
+    
     console.log("BODY EXPLORATION REPO :", body);
 
     const ally = await this.createAlly(body.ally);
