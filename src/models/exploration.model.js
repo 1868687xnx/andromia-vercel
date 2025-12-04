@@ -17,12 +17,8 @@ const explorationSchema = mongoose.Schema(
         affinity: { type: String, required: true },
         vault: {
             inox: { type: Number, default: 0 },
-            elements: { type: [{symbol: String, quantity: Number}]}
-<<<<<<< HEAD
-
-=======
+            elements: { type: [{element: String, quantity: Number}]}
             //elements: { type: [ElementSchema] }
->>>>>>> eabf490dc4131570a3e6d7b1ce854bdf87629b19
         },
         ally: { 
             type: mongoose.Schema.Types.ObjectId,

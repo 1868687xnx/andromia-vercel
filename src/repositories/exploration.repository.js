@@ -37,6 +37,7 @@ class ExplorationRepository {
 
   transform(exploration) {
     if (!exploration.ally) return exploration;
+    
     delete exploration.ally._id;
     delete exploration.explorateur;
     delete exploration.ally.explorateur;
