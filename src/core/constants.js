@@ -1,4 +1,4 @@
-// Fichier des contantes globales de l'application
+// Fichier des constantes globales de l'application
 
 export const TABLE_ELEMENT = [
 

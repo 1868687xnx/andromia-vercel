@@ -57,14 +57,12 @@ async function retrieveOne(req, res, next) {
   }
 }
 
-// Route pour retrieve le vault d'un explorateur
 async function retrieveVault(req, res, next) {
   try {
     let account = await explorateurRepository.retrieveByUUID(req.params.uuid);
     if (!account) {
       return next(HttpErrors.NotFound());
     } else {
-      // on retourne le vault de l'explorateur
       const vault = account.inventory.vault;
       res.status(200).json(vault);
     }
@@ -72,8 +70,6 @@ async function retrieveVault(req, res, next) {
     return next(err);
   }
 }
-
-
 
 async function addExploration(req, res, next) {
   try {
@@ -102,7 +98,6 @@ async function addExploration(req, res, next) {
 async function addAlly(req, res, next) {
   try {
     let explorateur = await explorateurRepository.retrieveByUUID(req.auth.uuid);
-    console.log("Explorateur dans allies.routes.js :", req.auth.uuid);
     let newAlly = await allyRepository.createForOneUser(
       req.params.uuid,
       explorateur._id
@@ -120,7 +115,6 @@ async function addAlly(req, res, next) {
 
 }
 
-// Route pour récupérer les Allies d'un explorateur spécifique par son UUID
 async function retrieveAlliesByUUID(req, res, next) {
   try {
     const explorateur = await explorateurRepository.retrieveByUUID(
@@ -154,7 +148,6 @@ async function retrieveAlliesByUUID(req, res, next) {
   }
 }
 
-// Route pour récupérer un ally spécifique d'un explorateur par son UUID
 async function retrieveOneAlly(req, res, next) {
   try {
     const explorateur = await explorateurRepository.retrieveByUUID(
@@ -166,9 +159,7 @@ async function retrieveOneAlly(req, res, next) {
       );
     }
 
-    console.log(req.params.uuidAlly);
     let ally = await allyRepository.retrieveByUUID(req.params.uuidAlly);
-    console.log("ALLY FOUND :", ally);
     if (!ally) {
       return next(HttpErrors.NotFound("Aucun ally trouvé avec cet UUID"));
     }
@@ -179,7 +170,6 @@ async function retrieveOneAlly(req, res, next) {
   }
 }
 
-// Route pour ouvrir un lootbox d'un explorateur
 async function openLootbox(req, res, next) {
   try {
     const explorateur = await explorateurRepository.retrieveByUUID(
@@ -191,21 +181,17 @@ async function openLootbox(req, res, next) {
       );
     }
 
-    // Ouvrir la lootbox et récupérer les récompenses
     const lootboxResult = await explorateurRepository.openLootbox(
       explorateur,
       TABLE_ELEMENT
     );
 
-    // On fait un randomize pour savoir si on ajoute un ally ou pas (50% de chance)
     const addAllyChance = Math.random();
     let allyAdded = null;
     if (addAllyChance > 0.5) {
-      // on ajoute un ally via le repository
       allyAdded = await allyRepository.generateRandomAlly(explorateur._id);
     }
 
-    // Retourner le résultat
     res.status(200).json({
       ...lootboxResult,
       ally: allyAdded,

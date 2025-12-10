@@ -8,7 +8,6 @@ import { Explorateur } from "../models/explorateur.model.js";
 class ExplorateurRepository {
   async login(credential, password) {
     const explorateur = await this.retrieveByCredentials(credential);
-    console.log(explorateur);
     if (!explorateur) {
       throw HttpErrors.Unauthorized();
     }
@@ -73,22 +72,6 @@ class ExplorateurRepository {
     return { access, refresh, expiresIn };
   }
 
-  // Pour valider le refresh token lors du rafraichissement des tokens
-
-  // async validateRefreshToken(email, headerBase64) {
-  //     const explorateur = await this.retrieveByEmail(email);
-  //     if (!explorateur) {
-  //         throw HttpErrors.Unauthorized();
-  //     }
-
-  //     const refreshToken = Buffer.from(headerBase64, 'base64').toString('utf-8');
-  //     if (refreshToken !== explorateur.refreshToken) {
-  //         throw HttpErrors.Unauthorized();
-  //     }
-
-  //     return explorateur;
-  // }
-
   transform(explorateur) {
     explorateur.href = `${process.env.BASE_URL}/explorers/${explorateur.uuid}`;
 
@@ -101,14 +84,11 @@ class ExplorateurRepository {
   }
 
   // Méthode pour ouvrir une lootbox
-  // Méthode pour ouvrir une lootbox
   async openLootbox(explorateur, TABLE_ELEMENT) {
-    // Vérifier que l'explorateur a des lootboxes
     if (explorateur.nbLootboxes <= 0) {
       throw HttpErrors.BadRequest("L'explorateur n'a pas de lootbox à ouvrir");
     }
 
-    // Décrémenter le nombre de lootbox
     explorateur.nbLootboxes -= 1;
 
     // Ajouter un nombre d'inox aléatoire entre 10 et 30
@@ -126,7 +106,6 @@ class ExplorateurRepository {
       });
     });
 
-    // Sauvegarder les modifications
     await explorateur.save();
 
     return {

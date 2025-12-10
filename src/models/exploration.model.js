@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import { type } from 'os';
-import { ElementSchema } from './element.model.js';
 
 const explorationSchema = mongoose.Schema(
     {
@@ -18,7 +16,6 @@ const explorationSchema = mongoose.Schema(
         vault: {
             inox: { type: Number, default: 0 },
             elements: { type: [{symbol: String, quantity: Number}]}
-            //elements: { type: [ElementSchema] }
         },
         ally: { 
             type: mongoose.Schema.Types.ObjectId,

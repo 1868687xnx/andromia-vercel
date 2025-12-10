@@ -8,7 +8,6 @@ const jobAddInox = schedule.scheduleJob('*/1 * * * *', async function(){
         console.log('2 inox added to all explorateurs');
 });
 
-// pour chaque heures 0 */1 * * *
 // Ajout entre 1 et 3 de quantités de chaques éléments à chaque explorateurs toutes les heures
 const jobAddElements = schedule.scheduleJob('0 */1 * * *', async function() {
     // Récupérer tous les explorateurs
@@ -28,11 +27,9 @@ const jobAddElements = schedule.scheduleJob('0 */1 * * *', async function() {
             { $inc: updateObj }
         );
     }
-    
     console.log('Random elements added to all explorateurs');
 });
 
-// à chaque jours à minuit 0 0 * * *
 // Job pour ajouter un lootbox à chaque explorateur à tout les jours à minuit
 const jobAddLootbox = schedule.scheduleJob('0 0 * * *', async function() {
     await Explorateur.updateMany({}, { $inc: { nbLootboxes: 1 } });

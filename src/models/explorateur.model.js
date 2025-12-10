@@ -10,10 +10,8 @@ const explorateurSchema = mongoose.Schema(
         email: { type: String, required: true, unique: true },
         uuid: { type: String, required: true, unique: true, default: () => crypto.randomUUID() },
         passwordHash: { type: String, required: true, unique: true },
-
         location: { type: String, default: 'Lac de Meth' },
         nbLootboxes: { type: Number, default: 0 },
-        // l'inventory contient les items ramassés par l'explorateur, soit des inox, soit des éléments divers
         inventory: {
             vault: {
                 inox: { type: Number, default: 0 },
@@ -39,5 +37,4 @@ explorateurSchema.virtual('allies', {
     foreignField: 'explorateur'
 });
 
-// Juste pour être sûr que les virtuals sont inclus lors de la conversion en objet
 explorateurSchema.set('toObject', { virtuals: true });
